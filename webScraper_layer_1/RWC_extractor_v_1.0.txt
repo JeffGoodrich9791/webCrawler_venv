@@ -1,0 +1,45 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+import time
+
+# Initialize the WebDriver with Chrome
+options = Options()
+options.add_experimental_option("detach", True)
+options.add_argument('--ignore-certificate-errors')
+options.binary_location = "C:/Program Files/Google/Chrome/Application/chrome.exe"
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+search_term = "Recipes"
+
+
+# Initialize the WebDriver with Chrome
+options = Options()
+options.add_argument('--ignore-certificate-errors')
+options.binary_location = "C:/Program Files/Google/Chrome/Application/chrome.exe"
+
+# Use ChromeDriverManager to automatically download the correct version of ChromeDriver
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+
+# Navigate to the given URL
+url = "https://www.foodandwine.com/appetizers/meze/mediterranean"
+
+driver.get(url)
+
+# Scroll down the page using JavaScript (adjust the number of scrolls based on the page structure)
+for _ in range(5):  # You may need to adjust this based on the page structure
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(2)  # Adjust the sleep time based on your needs
+
+# Find all elements with the specified span and alt attributes
+recipe_elements = driver.find_elements('//span[@class="link__wrapper" and contains(text(), "Get the Recipe")]/ancestor::a[@alt]')
+
+# Print the results
+for recipe_element in recipe_elements:
+    print(recipe_element.get_attribute('innerHTML'))
+
+# Close the browser
+driver.quit()
